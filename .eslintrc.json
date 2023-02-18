@@ -26,5 +26,13 @@
         "react"
     ],
     "rules": {
+        "capitalized-comments": [
+            "error",
+            "never",
+            {
+                "ignorePattern": "pragma|ignored",
+                "ignoreInlineComments": true
+            }
+        ]
     }
 }
