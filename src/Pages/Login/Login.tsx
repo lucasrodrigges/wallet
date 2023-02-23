@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,6 +10,8 @@ import Container from '@mui/material/Container';
 import {emailRegex} from '../../Utils/Constants/regex';
 import {passwordLength} from '../../Utils/Constants/constants';
 import {useNavigate} from 'react-router-dom';
+import {login} from '../../services/api';
+import Cookie from 'js-cookie';
 
 export default function Login() {
 	const [user, setUser] = useState({
@@ -29,6 +29,17 @@ export default function Login() {
 			...user,
 			[name]: value,
 		});
+	};
+
+	const handleLogin = async () => {
+		try {
+			const response = await login('/users/login', user);
+			if (response) {
+				Cookie.set('token', response.token, {expires: 7});
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
@@ -82,11 +93,12 @@ export default function Login() {
 						label='Remember me'
 					/> */}
 					<Button
-						type='submit'
+						type='button'
 						fullWidth
 						variant='contained'
 						disabled={isDisable}
 						sx={{mt: 3, mb: 2}}
+						onClick={handleLogin}
 					>
               Sign In
 					</Button>
